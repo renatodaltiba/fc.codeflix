@@ -29,4 +29,68 @@ public class DomainValidationTest
         action.Should().Throw<EntityValidationException>()
             .WithMessage("FieldName should not be null");
     }
+
+    [Theory(DisplayName = "Not Null or Empty")]
+    [InlineData(" ")]
+    [InlineData("  ")]
+    [InlineData(null)]
+    public void NotNullOrEmptyThrowWhenEmpry(string? target)
+    {
+        var action = () => DomainValidation.NotNullOrEmpty(target, "Target");
+        
+        action.Should().Throw<EntityValidationException>()
+            .WithMessage("Target should not be null or empty");
+    }
+    
+    [Fact(DisplayName = "Not Null or Empty OK")]
+    public void NotNullOrEmptyOk()
+    {
+        var value = Faker.Commerce.ProductName();
+
+        var action = () => DomainValidation.NotNullOrEmpty(value, "Value");
+
+        action.Should().NotThrow();
+    }
+    
+    [Fact(DisplayName = "Min Length")]
+    public void MinLengthOk()
+    {
+        var value = Faker.Commerce.ProductName();
+
+        var action = () => DomainValidation.MinLength(value, "Value", 5);
+
+        action.Should().NotThrow();
+    }
+    
+    [Theory(DisplayName = "Min Length Throw")]
+    [InlineData(" ")]
+    [InlineData("  ")]
+    [InlineData("1234")]
+    public void MinLengthThrow(string? target)
+    {
+        var action = () => DomainValidation.MinLength(target, "Target", 5);
+        
+        action.Should().Throw<EntityValidationException>()
+            .WithMessage("Target should have at least 5 characters");
+    }
+    
+    [Fact(DisplayName = "Max Length Ok")]
+    public void MaxLengthOk()
+    {
+
+        var action = () => DomainValidation.MaxLength("1234", "Value", 5);
+
+        action.Should().NotThrow();
+    }
+    
+    [Theory(DisplayName = "Max Length Throw")]
+    [InlineData("123456")]
+    [InlineData("1234567")]
+    public void MaxLengthThrow(string? target)
+    {
+        var action = () => DomainValidation.MaxLength(target, "Target", 5);
+        
+        action.Should().Throw<EntityValidationException>()
+            .WithMessage($"Target should have at most 5 characters");
+    }
 }
