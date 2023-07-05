@@ -1,10 +1,16 @@
+using FC.Codeflix.CatalogUnitTests.Common;
 using DomainEntity = FC.Codeflix.Catalog.Domain.Entity;
 
 namespace FC.Codeflix.CatalogUnitTests.Domain.Entity.Category;
 
-public class CategoryTestFixture
+public class CategoryTestFixture : BaseFixture
 {
-    public DomainEntity.Category ValidCategory => new("category name", "category description");
+    public CategoryTestFixture()
+        : base()
+    {
+        
+    }
+    public DomainEntity.Category ValidCategory => new(Faker.Lorem.Sentence(1), Faker.Lorem.Text());
 }
 
 [CollectionDefinition(nameof(CategoryTestFixture))]
