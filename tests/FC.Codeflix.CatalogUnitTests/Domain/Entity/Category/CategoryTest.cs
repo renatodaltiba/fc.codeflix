@@ -67,7 +67,7 @@ public class CategoryTest
         var validData = _fixture.ValidCategory;
         
         var exception = Assert.Throws<EntityValidationException>(() => new DomainEntity.Category(name!, validData.Description));
-        exception.Message.Should().Be($"{nameof(validData.Name)} should not be empty or null");
+        exception.Message.Should().Be($"{nameof(DomainEntity.Category.Name)} should not be null or empty");
     } 
     
     [Fact(DisplayName = "Throw when description is empty")]
@@ -88,7 +88,7 @@ public class CategoryTest
         var validData = _fixture.ValidCategory;
         
         var exception = Assert.Throws<EntityValidationException>(() => new DomainEntity.Category(name, validData.Description));
-        exception.Message.Should().Be($"{nameof(DomainEntity.Category.Name)} should be greater than 3 characters");
+        exception.Message.Should().Be($"{nameof(DomainEntity.Category.Name)} should have at least 3 characters");
     }
     
     [Fact(DisplayName = "Throw when name is major than 255 characters")]
@@ -97,7 +97,7 @@ public class CategoryTest
         var validData = _fixture.ValidCategory;
 
         var exception = Assert.Throws<EntityValidationException>(() => new DomainEntity.Category(new string('a', 256), validData.Description));
-        exception.Message.Should().Be($"{nameof(DomainEntity.Category.Name)} should be less than 255 characters");
+        exception.Message.Should().Be($"{nameof(DomainEntity.Category.Name)} should have at most 255 characters");
     }
     
     [Fact(DisplayName = "Throw when description is major than 10_000 characters")]
@@ -108,7 +108,7 @@ public class CategoryTest
 
         
         var exception = Assert.Throws<EntityValidationException>(() => new DomainEntity.Category(validData.Name, new string('a', 10_001)));
-        exception.Message.Should().Be($"{nameof(DomainEntity.Category.Description)} should be less than 10_000 characters");
+        exception.Message.Should().Be($"{nameof(DomainEntity.Category.Description)} should have at most 10000 characters");
     }
     
     [Fact(DisplayName = "It should activate category")]
